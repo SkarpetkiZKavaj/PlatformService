@@ -4,29 +4,34 @@ using PlatformService.Models;
 
 namespace PlatformService.Data.Implementations;
 
-public class PlatformRepository(AppDbContext context) : IPlatformRepository
+public class PlatformRepository : IPlatformRepository
 {
-    private readonly DbSet<Platform> _platforms = context.Platforms;
+    private readonly AppDbContext _context;
+
+    public PlatformRepository(AppDbContext context)
+    {
+        _context = context;
+    }
     
     public bool Save()
     {
-        return context.SaveChanges() >= 0;
+        return _context.SaveChanges() >= 0;
     }
 
     public IEnumerable<Platform> GetAll()
     {
-        return _platforms.ToList();
+        return _context.Platforms.ToList();
     }
 
     public Platform GetById(Guid id)
     {
-        return _platforms.FirstOrDefault(p => p.Id == id);
+        return _context.Platforms.FirstOrDefault(p => p.Id == id);
     }
 
     public void Create(Platform platform)
     {
         ArgumentNullException.ThrowIfNull(platform);
 
-        _platforms.Add(platform);
+        _context.Platforms.Add(platform);
     }
 }
