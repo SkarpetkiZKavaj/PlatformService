@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PlatformService.Data;
+using PlatformService.Data.Helpers;
 using PlatformService.Data.Implementations;
 using PlatformService.Data.Interfaces;
 
@@ -25,5 +26,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+PrepareDb.PreparePopulation(app);
 
 app.Run();
