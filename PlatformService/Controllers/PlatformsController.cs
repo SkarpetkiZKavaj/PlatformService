@@ -26,4 +26,30 @@ public class PlatformsController : ControllerBase
 
         return Ok(_mapper.Map<IEnumerable<Platform>, IEnumerable<PlatformReadDto>>(platforms));
     }
+
+    [HttpGet("{id:guid}", Name = "GetPlatform")]
+    public ActionResult<PlatformReadDto> GetPlatform(Guid id)
+    {
+        var platform = _repository.GetById(id);
+
+        if (platform is null)
+        {
+            return NotFound($"Platform with id {id} was not found");
+        }
+
+        return Ok(_mapper.Map<Platform, PlatformReadDto>(platform));
+    }
+
+    [HttpPost]
+    public ActionResult<PlatformReadDto> CreatePlatform(PlatformCreateDto platform)
+    {
+        var platformModel = _mapper.Map<PlatformCreateDto, Platform>(platform);
+        
+        _repository.Create(platformModel);
+        _repository.Save();
+
+        var platformReadDto = _mapper.Map<Platform, PlatformReadDto>(platformModel);
+        
+        return CreatedAtRoute(nameof(GetPlatform), new { Id = platformReadDto.Id }, platformReadDto);
+    }
 }
