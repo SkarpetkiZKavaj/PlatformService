@@ -23,7 +23,7 @@ public class PlatformRepository : IPlatformRepository
         return _context.Platforms.ToList();
     }
 
-    public Platform GetById(Guid id)
+    public Platform? GetById(Guid id)
     {
         return _context.Platforms.FirstOrDefault(p => p.Id == id);
     }
